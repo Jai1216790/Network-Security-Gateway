@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSG - Security Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-[#0b1120] text-slate-200 font-sans antialiased min-h-screen">
+
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full lg:w-64 bg-[#0f172a] border-r border-slate-800/80 p-5 flex flex-col justify-between shrink-0">
+            <div>
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="p-2.5 bg-blue-600/20 border border-blue-500/40 rounded-xl text-blue-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg text-white leading-tight">NSG</h1>
+                        <p class="text-xs text-slate-400">Network Security Gateway</p>
+                    </div>
+                </div>
+
+                <nav class="space-y-1.5">
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg bg-blue-600/20 text-blue-400 font-medium border border-blue-500/30">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#security-events-section" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <span>Security Events</span>
+                    </a>
+                    <a href="#blocked-ips-section" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                        <span>Blocked IPs</span>
+                    </a>
+                    <a href="#protection-section" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        <span>Protection</span>
+                    </a>
+                    <a href="#security-activity-section" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <span>Network Traffic</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="pt-6 border-t border-slate-800/80">
+                <div class="flex items-center space-x-2 text-xs text-emerald-400 font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>System Status</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">All systems operational</p>
+                <div class="text-[10px] text-slate-500 mt-2" id="last-updated-text">Last updated: --</div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="flex-1 p-6 space-y-6 overflow-y-auto scroll-smooth">
+            <!-- Header Bar -->
+            <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Security Dashboard</h2>
+                    <p class="text-sm text-slate-400">Real-time network security monitoring and threat detection</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-2 px-3 py-1.5 bg-emerald-950/40 border border-emerald-500/30 rounded-full text-xs text-emerald-400">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                        <span>Live Monitoring</span>
+                    </div>
+                    <div class="text-xs font-mono bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg text-slate-300" id="live-clock">
+                        --
+                    </div>
+                    <button id="refresh-btn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-200 rounded-lg flex items-center space-x-1 transition">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Metrics Cards Grid -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="bg-[#0f172a] border border-slate-800 p-4 rounded-xl flex items-center space-x-4">
+                    <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">Total Events</div>
+                        <div class="flex items-baseline space-x-2">
+                            <span class="text-2xl font-bold text-white" id="stat-total-events">--</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500">Recorded events</span>
+                    </div>
+                </div>
+
+                <div class="bg-[#0f172a] border border-slate-800 p-4 rounded-xl flex items-center space-x-4">
+                    <div class="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">IDS Events</div>
+                        <div class="flex items-baseline space-x-2">
+                            <span class="text-2xl font-bold text-white" id="stat-ids-events">--</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500">Detection records</span>
+                    </div>
+                </div>
+
+                <div class="bg-[#0f172a] border border-slate-800 p-4 rounded-xl flex items-center space-x-4">
+                    <div class="p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg text-purple-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">IPS Events</div>
+                        <div class="flex items-baseline space-x-2">
+                            <span class="text-2xl font-bold text-white" id="stat-ips-events">--</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500">Prevention records</span>
+                    </div>
+                </div>
+
+                <div class="bg-[#0f172a] border border-slate-800 p-4 rounded-xl flex items-center space-x-4">
+                    <div class="p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg text-rose-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">Blocked IPs</div>
+                        <div class="flex items-baseline space-x-2">
+                            <span class="text-2xl font-bold text-white" id="stat-blocked-ips">--</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500">Currently blocked</span>
+                    </div>
+                </div>
+
+                <div class="bg-[#0f172a] border border-slate-800 p-4 rounded-xl flex items-center space-x-4">
+                    <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">Active Threats</div>
+                        <div class="flex items-baseline space-x-2">
+                            <span class="text-2xl font-bold text-white" id="stat-active-threats">--</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500">Detected threats</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Full Width Chart Section -->
+            <section id="security-activity-section" class="grid grid-cols-1 gap-6 mb-6">
+                <div class="col-span-full bg-[#0f172a] border border-slate-800 p-5 rounded-xl flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-base font-semibold text-white">Security Activity</h3>
+                            <p class="text-xs text-slate-400">IDS and IPS events over time </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Scrollable Security Activity Chart Card -->
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 backdrop-blur-md shadow-xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 class="text-sm font-semibold text-slate-200">Security Traffic Timeline</h2>
+                                <p class="text-xs text-slate-400">Live network event activity stream (Horizontal Scrollable)</p>
+                            </div>
+                        </div>
+                
+                        <!-- Horizontal Scroll Wrapper -->
+                        <div class="w-full overflow-x-auto custom-scrollbar pb-2">
+                            <div class="h-80 min-w-[1400px] relative">
+                                <canvas id="securityActivityChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Events & Protection Panel -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Recent Security Events Card (Full Grid Column) -->
+                <div id="security-events-section" class="lg:col-span-2 bg-[#0f172a] border border-slate-800 p-5 rounded-xl flex flex-col justify-between space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="text-base font-semibold text-white">Recent Security Events</h3>
+                            <p class="text-xs text-slate-400">Latest IDS and IPS events from system logs</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="text" id="event-search" placeholder="Search events..." class="bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:border-blue-500 w-36 sm:w-48">
+                            <select id="event-filter" class="bg-slate-900 border border-slate-800 text-xs text-slate-300 rounded-lg px-2 py-1.5 focus:outline-none">
+                                <option value="ALL">All Types</option>
+                                <option value="IDS">IDS</option>
+                                <option value="IPS">IPS</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead class="bg-slate-900/60 text-slate-400 uppercase font-semibold border-b border-slate-800">
+                                <tr>
+                                    <th class="py-2.5 px-3">Time</th>
+                                    <th class="py-2.5 px-3">Source IP</th>
+                                    <th class="py-2.5 px-3">Type</th>
+                                    <th class="py-2.5 px-3">Severity</th>
+                                    <th class="py-2.5 px-3">Event Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="events-table-body" class="divide-y divide-slate-800/60 text-slate-300 font-mono">
+                                <tr>
+                                    <td colspan="5" class="py-8 text-center text-slate-500 text-xs">Waiting for live network events...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Right Side Protection & Blocked IPs Section -->
+                <div class="space-y-6">
+                    <div id="protection-section" class="bg-[#0f172a] border border-slate-800 p-5 rounded-xl space-y-4">
+                        <div>
+                            <h3 class="text-base font-semibold text-white">Protection Status</h3>
+                            <p class="text-xs text-slate-400">Security components and their current status</p>
+                        </div>
+
+                        <div class="space-y-3 text-xs">
+                            <div class="flex items-center justify-between p-3 bg-slate-900/50 border border-slate-800 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">Firewall</div>
+                                        <div class="text-[10px] text-slate-400">Network filtering and traffic control</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold text-[10px]">ACTIVE</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px]">FREE</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-slate-900/50 border border-slate-800 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">Intrusion Detection (IDS)</div>
+                                        <div class="text-[10px] text-slate-400">Monitors and detects suspicious activity</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold text-[10px]">ACTIVE</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px]">FREE</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-slate-900/50 border border-slate-800 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-1.5 bg-purple-500/10 text-purple-400 rounded-lg">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">Intrusion Prevention (IPS)</div>
+                                        <div class="text-[10px] text-slate-400">Automatically blocks detected threats</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold text-[10px]">ACTIVE</span>
+                                    <button id="ips-premium-badge" class="px-2 py-0.5 rounded bg-purple-900/60 hover:bg-purple-800 text-purple-300 border border-purple-500/40 text-[10px] font-bold cursor-pointer transition">PREMIUM</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="blocked-ips-section" class="bg-[#0f172a] border border-slate-800 p-5 rounded-xl space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-semibold text-white">Blocked IPs</h3>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="text-slate-500 uppercase font-semibold text-[10px]">
+                                    <tr>
+                                        <th class="pb-2">IP Address</th>
+                                        <th class="pb-2">Reason</th>
+                                        <th class="pb-2 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blocked-ips-table-body" class="divide-y divide-slate-800/40 text-slate-300 font-mono">
+                                    <tr>
+                                        <td colspan="3" class="py-4 text-center text-slate-500 text-xs">No blocked IPs</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="premium-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-[#0f172a] border border-purple-500/40 rounded-2xl p-6 max-w-md w-full space-y-5 shadow-2xl relative">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="text-center space-y-2">
+                <div class="inline-flex p-3 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-400 mb-1">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white">IPS Premium Protection</h3>
+                <p class="text-xs text-slate-400">Unlock automated real-time threat mitigation, deep packet inspection, and custom rule deployment.</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-xs space-y-2">
+                <div class="flex justify-between text-slate-300">
+                    <span>Plan:</span>
+                    <span class="font-semibold text-white">IPS Enterprise Tier</span>
+                </div>
+                <div class="flex justify-between text-slate-300">
+                    <span>Simulation Cost:</span>
+                    <span class="font-semibold text-emerald-400">$0.00 (Demo Mode)</span>
+                </div>
+            </div>
+
+            <button id="confirm-payment-btn" class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-xl text-xs shadow-lg transition">
+                Simulate Instant Upgrade
+            </button>
+        </div>
+    </div>
+
+    <!-- Script loaded directly from static/dashboard.js -->
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>
