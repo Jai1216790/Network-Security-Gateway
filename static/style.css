@@ -1,0 +1,27 @@
+/* Dark Scrollbar Integration */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0b1120;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
+
+/* Card Hover Glow effect */
+.bg-\[\#0f172a\] {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bg-\[\#0f172a\]:hover {
+    border-color: rgba(51, 65, 85, 0.9);
+}
